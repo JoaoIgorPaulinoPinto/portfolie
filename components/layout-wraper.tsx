@@ -1,0 +1,17 @@
+"use client";
+
+import { AppSidebar } from "@/components/app-sidebar";
+import { usePathname } from "next/navigation";
+
+export function LayoutWrapper({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  const hideSidebar = pathname === "/login"; // 🔥 página de login SEM sidebar
+
+  return (
+    <div className="flex h-screen w-full">
+      {!hideSidebar && <AppSidebar />}
+      <main className="flex-1 p-4">{children}</main>
+    </div>
+  );
+}
