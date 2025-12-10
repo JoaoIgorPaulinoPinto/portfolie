@@ -3,10 +3,23 @@
 import { RatioGroupFilter } from "@/components/radio-group";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { UserDTO, UserService } from "@/services/UserService";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const userService = new UserService();
 
 export default function Home() {
+  const [user, setUser] = useState<UserDTO | null>();
+  useEffect(() => {
+    async function fetchUser() {
+      const data = await userService.getUserData();
+      setUser(data);
+      console.log("USuario da home: " + data);
+    }
+    fetchUser();
+  }, []);
+
   const [filter, setSelectedFilter] = useState("");
   console.log(filter);
   return (
@@ -37,9 +50,7 @@ export default function Home() {
           <a
             href="github.com/projetomastar"
             className="text-right text-sm text-gray-500 italic"
-          >
-            www.github.com/projetomastar
-          </a>
+          ></a>
           <div className="w-full flex flex-row gap-5 text-gray-500">
             <span className="text-xs">10 commits</span>
             <span className="text-xs">1 merge</span>

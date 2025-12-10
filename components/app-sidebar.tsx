@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { UserDTO, UserService } from "@/services/UserService";
 import {
   ChevronDown,
   Code,
@@ -35,38 +36,39 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const items = [
-  { title: "Project 1", url: "project", icon: Code },
-  { title: "Project 2", url: "project", icon: Code },
-  { title: "Project 3", url: "project", icon: Code },
-];
+const userService = new UserService();
 
 export function AppSidebar() {
   const router = useRouter();
-  const routeTo = (route: string) => {
-    router.push(route);
-  };
+  const [user, setUser] = useState<UserDTO | null>();
+  useEffect(() => {
+    async function fetchUser() {
+      const data = await userService.getUserData();
+      setUser(data);
+
+      console.log(data);
+      console.log("mensagem", data);
+    }
+    fetchUser();
+  }, []);
+
+  const routeTo = (route: string) => router.push(route);
 
   return (
     <Sidebar>
-      {/* AQUI: layout flex para separar o topo e o rodapé */}
-      <SidebarContent className="flex flex-col h-full justify-between">
-        {/* ------------------------- */}
-        {/*      MENU SUPERIOR        */}
-        {/* ------------------------- */}
+      <SidebarContent className=" flex flex-col h-full justify-between">
+        {/* MENU SUPERIOR */}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* PROFILE */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <div
-                    onClick={() => {
-                      routeTo("/");
-                    }}
+                    onClick={() => routeTo("/")}
                     className="flex items-center gap-2"
                   >
                     <House className="size-4" />
@@ -75,7 +77,6 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {/* PROJECTS */}
               <Collapsible defaultOpen className="group/collapsible">
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton>
@@ -86,19 +87,27 @@ export function AppSidebar() {
 
                 <CollapsibleContent>
                   <SidebarMenuSub>
-                    {items.map((item, i) => (
-                      <SidebarMenuItem key={i}>
+                    {user?.projects?.map((project) => (
+                      <SidebarMenuItem key={project.id}>
                         <SidebarMenuButton asChild>
                           <a
-                            href={item.url}
+                            href={project.url}
+                            target="_blank"
                             className="flex items-center gap-2"
                           >
-                            <item.icon className="size-4" />
-                            <span>{item.title}</span>
+                            <Code className="size-4" />
+                            <span>{project.name}</span>
                           </a>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
+
+                    {/* Se não tiver projetos ainda */}
+                    {user?.projects?.length === 0 && (
+                      <p className="text-xs text-muted-foreground p-2">
+                        Nenhum projeto encontrado.
+                      </p>
+                    )}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </Collapsible>
@@ -106,25 +115,27 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* ------------------------- */}
-        {/*      USUÁRIO EM BAIXO     */}
-        {/* ------------------------- */}
+        {/* USUÁRIO (RODAPÉ) */}
         <div className="p-1">
           <DropdownMenu>
-            <DropdownMenuTrigger className=" pr-5 pl-5 pt-6 pb-6 " asChild>
-              <SidebarMenuButton className="flex items-center gap-3">
-                <Image
-                  width={0}
-                  height={0}
-                  src="https://github.com/shadcn.png"
-                  alt="avatar"
-                  className="h-9 w-9 rounded-full"
-                />
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton className="flex items-center gap-3 pr-5 pl-5 pt-6 pb-6">
+                {user && (
+                  <Image
+                    src={user.avatar_url}
+                    width={40}
+                    height={40}
+                    alt="avatar"
+                    className="rounded-full"
+                  />
+                )}
 
                 <div className="flex flex-col text-left">
-                  <span className="text-sm font-medium">shadcn</span>
-                  <span className="text-xs text-muted-foreground">
-                    m@example.com
+                  <span className="text-[12px] font-medium">
+                    {user?.nome ?? "Carregando..."}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground">
+                    {user?.login ?? "Carregando..."}
                   </span>
                 </div>
 
@@ -132,18 +143,20 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent
-              side="right"
-              align="end"
-              className="w-[--radix-popper-anchor-width]"
-            >
+            <DropdownMenuContent side="right" align="end">
               <DropdownMenuItem>
-                <div className="w-full flex flex-row justify-between items-center">
+                <div className="w-full flex justify-between items-center">
                   Settings <Settings />
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <div className="text-red-500 w-full flex flex-row justify-between items-center">
+
+              <DropdownMenuItem
+                onClick={() => {
+                  userService.logout();
+                  router.push("/login");
+                }}
+              >
+                <div className="text-red-500 w-full flex justify-between items-center">
                   Sign out <LogOut className="text-red-500" />
                 </div>
               </DropdownMenuItem>
