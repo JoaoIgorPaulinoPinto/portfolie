@@ -92,7 +92,7 @@ export function AppSidebar() {
                       <SidebarMenuItem key={i}>
                         <SidebarMenuButton asChild>
                           <a
-                            href={project.url}
+                            href={project.htmlUrl}
                             target="_blank"
                             className="flex items-center gap-2"
                           >

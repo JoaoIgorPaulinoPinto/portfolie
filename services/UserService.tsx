@@ -3,12 +3,13 @@ import Cookies from "js-cookie";
 
 export interface ProjectDTO {
   id: number;
+  watchers: number;
   name: string;
   description: string;
-  url: string;
+  htmlUrl: string;
   language: string;
-  stars: number;
-  forks: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface UserDTO {

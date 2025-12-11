@@ -10,8 +10,10 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen w-full">
-      {!hideSidebar && <AppSidebar />}
-      <main className="flex-1 p-4">{children}</main>
+      <div>{!hideSidebar && <AppSidebar />}</div>
+      <div className="w-full ml-15">
+        <main className="flex-1 p-4">{children}</main>
+      </div>
     </div>
   );
 }
