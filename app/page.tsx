@@ -3,22 +3,24 @@
 import { RatioGroupFilter } from "@/components/radio-group";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserDTO, UserService } from "@/services/UserService";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const userService = new UserService();
+// const userService = new UserService();
 
 export default function Home() {
-  const [user, setUser] = useState<UserDTO | null>();
-  useEffect(() => {
-    async function fetchUser() {
-      const data = await userService.getUserData();
-      setUser(data);
-      console.log("USuario da home: " + data);
-    }
-    fetchUser();
-  }, []);
+  // const [user, setUser] = useState<UserDTO | null>();
+  // useEffect(() => {
+  //   if (user) {
+  //     return;
+  //   }
+  //   async function fetchUser() {
+  //     const data = await userService.getUserData();
+  //     setUser(data);
+  //     console.log("USuario da home: " + data);
+  //   }
+  //   fetchUser();
+  // }, []);
 
   const [filter, setSelectedFilter] = useState("");
   console.log(filter);

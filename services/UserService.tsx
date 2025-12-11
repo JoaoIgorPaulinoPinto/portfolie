@@ -13,10 +13,10 @@ export interface ProjectDTO {
 
 export interface UserDTO {
   id: number;
-  nome: string;
-  login: string;
-  avatar_url: string;
-  profile_url: string;
+  name: string;
+  username: string;
+  avatarUrl: string;
+  githubUrl: string;
   projects: ProjectDTO[];
 }
 export class UserService {
@@ -31,7 +31,7 @@ export class UserService {
     this.api.interceptors.request.use((config) => {
       const token = Cookies.get("token");
       if (token) {
-        config.headers.Authorization = `token ${token}`;
+        config.headers.Authorization = `${token}`;
       }
       return config;
     });
@@ -56,7 +56,7 @@ export class UserService {
   async getUserData(): Promise<UserDTO | null> {
     try {
       const res = await this.api.get("/user/git");
-      return res.data; // <- agora certo
+      return res.data;
     } catch (err) {
       console.error("Erro ao buscar user:", err);
       return null;

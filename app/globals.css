@@ -112,6 +112,31 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+/* Aplica a todos os elementos */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--primary) var(--sidebar); /* Firefox: thumb e track */
+}
+
+/* Chrome, Edge e Safari */
+*::-webkit-scrollbar {
+  width: 6px; /* largura da barra */
+  height: 6px; /* altura, se for horizontal */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor do fundo */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondary); /* cor da “thumb” */
+  border-radius: 3px; /* borda arredondada */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #000 !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

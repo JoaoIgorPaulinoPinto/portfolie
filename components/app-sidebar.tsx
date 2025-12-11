@@ -57,8 +57,8 @@ export function AppSidebar() {
   const routeTo = (route: string) => router.push(route);
 
   return (
-    <Sidebar>
-      <SidebarContent className=" flex flex-col h-full justify-between">
+    <Sidebar className="w-80">
+      <SidebarContent className=" flex flex-col h-full w-auto justify-between">
         {/* MENU SUPERIOR */}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -79,16 +79,17 @@ export function AppSidebar() {
 
               <Collapsible defaultOpen className="group/collapsible">
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton>
-                    Projetos
-                    <ChevronDown className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                  <SidebarMenuButton className="flex justify-between items-center">
+                    <span>Projetos</span>
+                    {/* Botão de esconder/mostrar */}
+                    <ChevronDown className="ml-2 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
 
                 <CollapsibleContent>
-                  <SidebarMenuSub>
-                    {user?.projects?.map((project) => (
-                      <SidebarMenuItem key={project.id}>
+                  <SidebarMenuSub className="max-h-140 overflow-y-auto">
+                    {user?.projects?.map((project, i) => (
+                      <SidebarMenuItem key={i}>
                         <SidebarMenuButton asChild>
                           <a
                             href={project.url}
@@ -102,7 +103,6 @@ export function AppSidebar() {
                       </SidebarMenuItem>
                     ))}
 
-                    {/* Se não tiver projetos ainda */}
                     {user?.projects?.length === 0 && (
                       <p className="text-xs text-muted-foreground p-2">
                         Nenhum projeto encontrado.
@@ -122,7 +122,7 @@ export function AppSidebar() {
               <SidebarMenuButton className="flex items-center gap-3 pr-5 pl-5 pt-6 pb-6">
                 {user && (
                   <Image
-                    src={user.avatar_url}
+                    src={user.avatarUrl}
                     width={40}
                     height={40}
                     alt="avatar"
@@ -132,10 +132,10 @@ export function AppSidebar() {
 
                 <div className="flex flex-col text-left">
                   <span className="text-[12px] font-medium">
-                    {user?.nome ?? "Carregando..."}
+                    {user?.name ?? "Carregando..."}
                   </span>
                   <span className="text-[10px] text-muted-foreground">
-                    {user?.login ?? "Carregando..."}
+                    {user?.username ?? "Carregando..."}
                   </span>
                 </div>
 
