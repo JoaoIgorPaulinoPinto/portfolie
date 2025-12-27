@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import ProjectCard from "@/components/ui/project-card";
 import { ProjectDTO, UserService } from "@/services/UserService";
 import { Search } from "lucide-react";
+import { redirect } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -15,11 +16,14 @@ export default function Home() {
   const [projects, setUserProjects] = useState<ProjectDTO[] | null>();
   useEffect(() => {
     async function fetchUser() {
-      const data = await userService.getUserData();
-      setUserProjects(data?.projects);
-
-      console.log(data);
-      console.log("mensagem", data);
+      try {
+        const data = await userService.getUserData();
+        setUserProjects(data?.projects);
+        console.log(data);
+        console.log("mensagem", data);
+      } catch {
+        redirect("/login");
+      }
     }
     fetchUser();
   }, []);

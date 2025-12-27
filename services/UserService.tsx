@@ -59,8 +59,7 @@ export class UserService {
       const res = await this.api.get("/user/git");
       return res.data;
     } catch (err) {
-      console.error("Erro ao buscar user:", err);
-      return null;
+      throw new Error("Erro ao buscar user:" + err);
     }
   }
 

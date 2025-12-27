@@ -27,6 +27,7 @@ export default function Page() {
     };
 
     handleGitHubCallback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   return (
