@@ -1,5 +1,6 @@
 "use client";
 
+import { ProjectDTO, UserService } from "@/services/UserService";
 import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -17,18 +18,30 @@ import {
   Heading3,
   Italic,
   List,
+  Save,
   Terminal,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TurndownService from "turndown";
+const userService = new UserService();
 
 export default function ReadmeEditorPage() {
   const params = useParams();
   const repoName = params.projectname;
   const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [markdown, setMarkdown] = useState("");
+  const [projects, setUserProjects] = useState<ProjectDTO[] | null>();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const data = await userService.getUserData();
+      setUserProjects(data?.Projects || null);
+    }
+    fetchUser();
+  }, []);
 
   // Memoizando a função de conversão para evitar recriações desnecessárias
   const getTurndownService = useCallback(() => {
@@ -56,30 +69,33 @@ export default function ReadmeEditorPage() {
       }),
     ],
     immediatelyRender: false,
-    content: `<h1>${repoName}</h1><p>Uma descrição épica começa aqui...</p>`,
+    content: {
+      prompt: projects?.find((p) => p.Name === repoName)?.Readme || "",
+    },
     editorProps: {
       attributes: {
         class:
           "prose prose-invert max-w-none focus:outline-none min-h-[500px] p-8 selection:bg-blue-500/30",
       },
     },
-    // SOLUÇÃO PARA O ERRO: Inicializa o markdown assim que o editor é criado
     onCreate: ({ editor }) => {
       updateMarkdown(editor.getHTML());
     },
-    // Atualização em tempo real do Markdown
     onUpdate: ({ editor }) => {
       updateMarkdown(editor.getHTML());
     },
   });
-
-  // Removido o useEffect que causava o erro react-hooks/set-state-in-effect
 
   const copyToClipboard = useCallback(() => {
     navigator.clipboard.writeText(markdown);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [markdown]);
+
+  const saveEditorHtml = useCallback(() => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }, []);
 
   const downloadMarkdown = () => {
     const element = document.createElement("a");
@@ -127,17 +143,29 @@ export default function ReadmeEditorPage() {
               </>
             )}
           </button>
+
+          <button
+            onClick={saveEditorHtml}
+            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all ${
+              saved
+                ? "bg-emerald-500 text-white"
+                : "bg-white text-black hover:bg-zinc-200"
+            }`}
+          >
+            {saved ? (
+              "Salvo!"
+            ) : (
+              <>
+                <Save className="size-3" /> Salvar .md
+              </>
+            )}
+          </button>
+
           <button
             onClick={downloadMarkdown}
             className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all bg-blue-800 text-white hover:bg-zinc-700 border border-zinc-700"
           >
             <Download className="size-3" /> Baixar .md
-          </button>
-          <button
-            onClick={downloadMarkdown}
-            className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all bg-zinc-800 text-white hover:bg-zinc-700 border border-zinc-700"
-          >
-            <Download className="size-3" /> Salvar .md
           </button>
         </div>
       </header>

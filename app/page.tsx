@@ -18,9 +18,8 @@ export default function Home() {
     async function fetchUser() {
       try {
         const data = await userService.getUserData();
-        setUserProjects(data?.projects);
+        setUserProjects(data?.Projects || null);
         console.log(data);
-        console.log("mensagem", data);
       } catch {
         redirect("/login");
       }

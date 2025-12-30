@@ -2,23 +2,24 @@ import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 
 export interface ProjectDTO {
-  id: number;
-  watchers: number;
-  name: string;
-  description: string;
-  htmlUrl: string;
-  language: string;
-  created_at: string;
-  updated_at: string;
+  Id: number;
+  Watchers: number;
+  Name: string;
+  Description: string;
+  Readme: string;
+  HtmlUrl: string;
+  Language: string;
+  Created_at: string;
+  Updated_at: string;
 }
 
 export interface UserDTO {
-  id: number;
-  name: string;
-  username: string;
-  avatarUrl: string;
-  githubUrl: string;
-  projects: ProjectDTO[];
+  Id: number;
+  Name: string;
+  Username: string;
+  AvatarUrl: string;
+  GithubUrl: string;
+  Projects: ProjectDTO[];
 }
 export class UserService {
   private api: AxiosInstance;
@@ -57,6 +58,7 @@ export class UserService {
   async getUserData(): Promise<UserDTO | null> {
     try {
       const res = await this.api.get("/user/git");
+      console.log("User data:", res.data);
       return res.data;
     } catch (err) {
       throw new Error("Erro ao buscar user:" + err);
