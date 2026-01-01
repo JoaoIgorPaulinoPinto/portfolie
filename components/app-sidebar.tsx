@@ -90,21 +90,21 @@ export function AppSidebar() {
 
                 <CollapsibleContent>
                   <SidebarMenuSub>
-                    {user?.projects?.map((project, i) => (
+                    {user?.Projects?.map((project, i) => (
                       <SidebarMenuItem
                         key={i}
-                        onClick={() => GoToProject(project.name)}
+                        onClick={() => GoToProject(project.Name)}
                       >
                         <SidebarMenuButton asChild>
                           <div className="flex items-center gap-2">
                             <Code className="size-4" />
-                            <span>{project.name}</span>
+                            <span>{project.Name}</span>
                           </div>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
 
-                    {user?.projects?.length === 0 && (
+                    {user?.Projects?.length === 0 && (
                       <p className="text-xs text-muted-foreground p-2">
                         Nenhum projeto encontrado.
                       </p>
@@ -121,9 +121,9 @@ export function AppSidebar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton className="flex items-center gap-3 pr-5 pl-5 pt-6 pb-6 hover:bg-transparent active:bg-transparent">
-                {user?.avatarUrl && (
+                {user?.AvatarUrl && (
                   <Image
-                    src={user.avatarUrl}
+                    src={user.AvatarUrl}
                     width={32}
                     height={32}
                     alt="avatar"
@@ -133,10 +133,10 @@ export function AppSidebar() {
 
                 <div className="flex flex-col text-left overflow-hidden">
                   <span className="text-sm font-medium truncate">
-                    {user?.name ?? "Carregando..."}
+                    {user?.Name ?? "Carregando..."}
                   </span>
                   <span className="text-xs text-muted-foreground truncate">
-                    {user?.username ?? "Carregando..."}
+                    {user?.Username ?? "Carregando..."}
                   </span>
                 </div>
 
