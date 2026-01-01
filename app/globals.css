@@ -1,6 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Asimovian&family=Bruno+Ace+SC&family=Dancing+Script:wght@400..700&family=Iceberg&family=Michroma&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

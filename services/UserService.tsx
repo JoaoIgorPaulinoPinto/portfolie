@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 export interface ProjectDTO {
   Id: number;
@@ -61,7 +62,7 @@ export class UserService {
       console.log("User data:", res.data);
       return res.data;
     } catch (err) {
-      throw new Error("Erro ao buscar user:" + err);
+      redirect("/login");
     }
   }
 
